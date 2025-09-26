@@ -439,7 +439,7 @@ class PixPopupAlternative {
                     </div>
                     <div class="pix-popup-info">
                         <h3 class="model-name" data-config="model.name">Luanny passos</h3>
-                        <p class="model-handle" data-config="model.handle">@eu.mihalyc</p>
+                        <p class="model-handle" data-config="model.handle">@euuluanny</p>
                     </div>
                 </div>
             </div>

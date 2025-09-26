@@ -22,7 +22,7 @@ function getConfig() {
     
     model: {
       name: process.env.MODEL_NAME || 'Luanny passos',
-      handle: process.env.MODEL_HANDLE ? (process.env.MODEL_HANDLE.startsWith('@') ? process.env.MODEL_HANDLE : `@${process.env.MODEL_HANDLE}`) : '@eu.mihalyc',
+      handle: process.env.MODEL_HANDLE ? (process.env.MODEL_HANDLE.startsWith('@') ? process.env.MODEL_HANDLE : `@${process.env.MODEL_HANDLE}`) : '@euuluanny',
       bio: process.env.MODEL_BIO || 'Tenho 22 aninhos… com os peitos perfeitos pra tu apertar enquanto mete gostoso, e a BUNDA MAIS GOSTOSA que você vai ver! 🍑 Aqui é o meu cantinho mais íntimo… Você vai me ver: transando, me tocando, gemendo e gozando!🔥 De frente, de costas, de quatro… e com o dedinho passando onde você mais sonha🫦 Faço avaliações, personalizados e o que mais você quiser.🔞 Curiosidade mata, vem me ver abertinha pra você! ❤‍🔥'
     },
     
