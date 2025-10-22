@@ -39,8 +39,8 @@ class PaymentModal {
                         <img src="images/perfil.jpg" alt="Perfil">
                     </div>
                     <div class="payment-profile-info">
-                        <h3 class="model-name" data-config="model.name">luanny passos</h3>
-                        <p class="model-handle" data-config="model.handle">@euuluanny</p>
+                        <h3 class="model-name" data-config="model.name">hadrielle maria</h3>
+                        <p class="model-handle" data-config="model.handle">@hadrielle_maria</p>
                     </div>
                 </div>
             </div>
