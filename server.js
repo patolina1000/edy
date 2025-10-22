@@ -85,7 +85,6 @@ app.post('/api/auth-token', async (req, res) => {
         const clientSecret = cfg.syncpay?.clientSecret;
 
         if (!clientId || !clientSecret) {
-            console.error('[Auth] Credenciais não configuradas');
             return res.status(500).json({
                 message: 'Credenciais da API não configuradas',
                 error: 'syncpay.clientId ou syncpay.clientSecret não definidos'
@@ -129,7 +128,6 @@ app.post('/api/auth-token', async (req, res) => {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('[Auth] Erro na autenticação:', response.status, errorText);
                 
                 // Tentar parsear como JSON se possível
                 let errorData;
@@ -153,7 +151,6 @@ app.post('/api/auth-token', async (req, res) => {
             
             // Validar se a resposta contém os campos obrigatórios
             if (!data.access_token) {
-                console.error('[Auth] Token não encontrado na resposta');
                 return res.status(500).json({
                     message: 'Resposta inválida da API',
                     error: 'access_token não encontrado na resposta'
@@ -166,14 +163,12 @@ app.post('/api/auth-token', async (req, res) => {
             clearTimeout(timeoutId);
             
             if (fetchError.name === 'AbortError') {
-                console.error('[Auth] Timeout na requisição para API externa');
                 return res.status(504).json({
                     message: 'Timeout na conexão com a API SyncPayments',
                     error: 'A requisição demorou mais de 30 segundos'
                 });
             }
             
-            console.error('[Auth] Erro de rede:', fetchError.message);
             return res.status(503).json({
                 message: 'Erro de conexão com a API SyncPayments',
                 error: fetchError.message,
@@ -181,8 +176,6 @@ app.post('/api/auth-token', async (req, res) => {
             });
         }
     } catch (err) {
-        console.error('[Auth] Erro ao obter token:', err.message);
-        console.error('[Auth] Stack trace:', err.stack);
         
         res.status(500).json({
             message: 'Erro interno do servidor',
@@ -198,7 +191,6 @@ app.get('/api/balance', async (req, res) => {
         const response = await syncpayGet('/balance');
         res.json(response.data);
     } catch (err) {
-        console.error('[Balance] Erro ao obter saldo:', err.response?.data || err.message);
         res.status(500).json({
             message: 'Não foi possível obter o saldo',
             details: err.response?.data || err.message
@@ -214,7 +206,6 @@ app.post('/api/cash-in', async (req, res) => {
         // console.log('✅ [DEBUG] Transação criada com sucesso:', response.data);
         res.json(response.data);
     } catch (err) {
-        console.error('[Cash-in] Erro ao criar transação:', err.response?.data || err.message);
         res.status(err.response?.status || 500).json({
             message: 'Não foi possível criar a transação',
             details: err.response?.data || err.message
@@ -230,7 +221,6 @@ app.post('/api/cash-out', async (req, res) => {
         // console.log('✅ [DEBUG] Saque criado com sucesso:', response.data);
         res.json(response.data);
     } catch (err) {
-        console.error('[Cash-out] Erro ao criar saque:', err.response?.data || err.message);
         res.status(err.response?.status || 500).json({
             message: 'Não foi possível criar o saque',
             details: err.response?.data || err.message
@@ -247,7 +237,6 @@ app.get('/api/transaction/:identifier', async (req, res) => {
         // console.log('✅ [DEBUG] Status obtido:', response.data);
         res.json(response.data);
     } catch (err) {
-        console.error('[Transaction] Erro ao consultar status:', err.response?.data || err.message);
         res.status(err.response?.status || 500).json({
             message: 'Não foi possível consultar o status da transação',
             details: err.response?.data || err.message
@@ -263,7 +252,6 @@ app.get('/api/profile', async (req, res) => {
         // console.log('✅ [DEBUG] Dados do parceiro obtidos:', response.data);
         res.json(response.data);
     } catch (err) {
-        console.error('[Profile] Erro ao consultar perfil:', err.response?.data || err.message);
         res.status(err.response?.status || 500).json({
             message: 'Não foi possível consultar dados do parceiro',
             details: err.response?.data || err.message
@@ -283,7 +271,6 @@ app.get('/api/webhooks', async (req, res) => {
         // console.log('✅ [DEBUG] Webhooks listados:', response.data);
         res.json(response.data);
     } catch (err) {
-        console.error('[Webhooks] Erro ao listar webhooks:', err.response?.data || err.message);
         res.status(err.response?.status || 500).json({
             message: 'Não foi possível listar os webhooks',
             details: err.response?.data || err.message
@@ -298,7 +285,6 @@ app.post('/api/webhooks', async (req, res) => {
         // console.log('✅ [DEBUG] Webhook criado:', response.data);
         res.json(response.data);
     } catch (err) {
-        console.error('[Webhooks] Erro ao criar webhook:', err.response?.data || err.message);
         res.status(err.response?.status || 500).json({
             message: 'Não foi possível criar o webhook',
             details: err.response?.data || err.message
@@ -314,7 +300,6 @@ app.put('/api/webhooks/:id', async (req, res) => {
         // console.log('✅ [DEBUG] Webhook atualizado:', response.data);
         res.json(response.data);
     } catch (err) {
-        console.error('[Webhooks] Erro ao atualizar webhook:', err.response?.data || err.message);
         res.status(err.response?.status || 500).json({
             message: 'Não foi possível atualizar o webhook',
             details: err.response?.data || err.message
@@ -330,7 +315,6 @@ app.delete('/api/webhooks/:id', async (req, res) => {
         // console.log('✅ [DEBUG] Webhook deletado:', response.data);
         res.json(response.data);
     } catch (err) {
-        console.error('[Webhooks] Erro ao deletar webhook:', err.response?.data || err.message);
         res.status(err.response?.status || 500).json({
             message: 'Não foi possível deletar o webhook',
             details: err.response?.data || err.message

@@ -12,7 +12,6 @@
         
         // Verificar se a integração está disponível
         if (!window.SyncPayIntegration) {
-            console.error('❌ SyncPayIntegration não encontrada!');
             return;
         }
 
