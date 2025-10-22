@@ -44,7 +44,7 @@ function getConfig() {
       semestrial: {
         buttonId: process.env.PLAN_SEMESTRIAL_BUTTON_ID || 'btn-6-meses',
         label: process.env.PLAN_SEMESTRIAL_LABEL || '6 meses (50% off)',
-        priceLabel: process.env.PLAN_SEMESTRIAL_PRICE_LABEL || 'R$ 59,90 (50% off)',
+        priceLabel: process.env.PLAN_SEMESTRIAL_PRICE_LABEL || 'R$ 59,90',
         price: parseFloat(process.env.PLAN_SEMESTRIAL_PRICE) || 59.90,
         description: process.env.PLAN_SEMESTRIAL_DESCRIPTION || 'Assinatura semestral'
       }
