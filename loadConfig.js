@@ -30,21 +30,21 @@ function getConfig() {
       monthly: {
         buttonId: process.env.PLAN_MONTHLY_BUTTON_ID || 'btn-1-mes',
         label: process.env.PLAN_MONTHLY_LABEL || '1 mês',
-        priceLabel: process.env.PLAN_MONTHLY_PRICE_LABEL || 'R$ 24,99',
-        price: parseFloat(process.env.PLAN_MONTHLY_PRICE) || 24.99,
+        priceLabel: process.env.PLAN_MONTHLY_PRICE_LABEL || 'R$ 19,90',
+        price: parseFloat(process.env.PLAN_MONTHLY_PRICE) || 19.90,
         description: process.env.PLAN_MONTHLY_DESCRIPTION || 'Assinatura mensal'
       },
       quarterly: {
         buttonId: process.env.PLAN_QUARTERLY_BUTTON_ID || 'btn-3-meses',
-        label: process.env.PLAN_QUARTERLY_LABEL || '3 meses (30% off)',
+        label: process.env.PLAN_QUARTERLY_LABEL || '3 meses (33% off)',
         priceLabel: process.env.PLAN_QUARTERLY_PRICE_LABEL || 'R$ 39,90',
         price: parseFloat(process.env.PLAN_QUARTERLY_PRICE) || 39.90,
         description: process.env.PLAN_QUARTERLY_DESCRIPTION || 'Assinatura trimestral'
       },
       semestrial: {
         buttonId: process.env.PLAN_SEMESTRIAL_BUTTON_ID || 'btn-6-meses',
-        label: process.env.PLAN_SEMESTRIAL_LABEL || '6 meses (40% off)',
-        priceLabel: process.env.PLAN_SEMESTRIAL_PRICE_LABEL || 'R$ 59,90',
+        label: process.env.PLAN_SEMESTRIAL_LABEL || '6 meses (50% off)',
+        priceLabel: process.env.PLAN_SEMESTRIAL_PRICE_LABEL || 'R$ 59,90 (50% off)',
         price: parseFloat(process.env.PLAN_SEMESTRIAL_PRICE) || 59.90,
         description: process.env.PLAN_SEMESTRIAL_DESCRIPTION || 'Assinatura semestral'
       }
