@@ -785,9 +785,9 @@ app.use((req, res, next) => {
 });
 
 // Servir arquivos estáticos de cada diretório (APÓS o debug)
-app.use('/links', express.static(path.join(__dirname, 'links')));
+app.get('/links', (req, res) => res.redirect(301, '/links/'));
+app.use('/links', express.static(path.join(__dirname, 'links'), { redirect: true }));
 app.use('/compra-aprovada', express.static(path.join(__dirname, 'compra-aprovada')));
-app.use('/redirect-privacy', express.static(path.join(__dirname, 'redirect-privacy')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Servir arquivos estáticos do funil completo
@@ -798,7 +798,6 @@ app.use('/assets', express.static(path.join(__dirname, 'funil_completo/assets'))
 
 // Middleware para servir arquivos estáticos de forma mais flexível
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
-app.use('/images', express.static(path.join(__dirname, 'links/images')));
 app.use('/icons', express.static(path.join(__dirname, 'links/icons')));
 app.use('/compra-aprovada/images', express.static(path.join(__dirname, 'compra-aprovada/images')));
 
