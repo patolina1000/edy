@@ -87,7 +87,6 @@
             }
 
         } catch (error) {
-            console.error('❌ Erro na autenticação:', error);
             throw error;
         }
     }
@@ -146,7 +145,6 @@
             return data;
 
         } catch (error) {
-            console.error('❌ Erro ao consultar saldo:', error);
             throw error;
         }
     }
@@ -241,7 +239,6 @@
             return data;
 
         } catch (error) {
-            console.error('❌ Erro ao criar cash-in:', error);
             throw error;
         }
     }
@@ -278,7 +275,6 @@
             return data;
 
         } catch (error) {
-            console.error('❌ Erro ao consultar status da transação:', error);
             throw error;
         }
     }
@@ -351,7 +347,6 @@
             return data;
 
         } catch (error) {
-            console.error('❌ Erro ao criar cash-out:', error);
             throw error;
         }
     }
@@ -386,7 +381,6 @@
             return data;
 
         } catch (error) {
-            console.error('❌ Erro ao consultar dados do parceiro:', error);
             throw error;
         }
     }
@@ -435,7 +429,6 @@
             return data;
 
         } catch (error) {
-            console.error('❌ Erro ao listar webhooks:', error);
             throw error;
         }
     }
@@ -490,7 +483,6 @@
             return data;
 
         } catch (error) {
-            console.error('❌ Erro ao criar webhook:', error);
             throw error;
         }
     }
@@ -549,7 +541,6 @@
             return data;
 
         } catch (error) {
-            console.error('❌ Erro ao atualizar webhook:', error);
             throw error;
         }
     }
@@ -588,7 +579,6 @@
             return data;
 
         } catch (error) {
-            console.error('❌ Erro ao deletar webhook:', error);
             throw error;
         }
     }
@@ -608,11 +598,7 @@
      * Função utilitária para exibir erros formatados
      */
     function logError(message, error = null) {
-        const timestamp = new Date().toLocaleString('pt-BR');
-        console.error(`[${timestamp}] ❌ ${message}`);
-        if (error) {
-            console.error('🔍 Detalhes do erro:', error);
-        }
+        // Logs de erro da integração SyncPay desabilitados intencionalmente
     }
 
     /**
@@ -842,7 +828,6 @@
                     alert('PIX gerado com sucesso! Código: ' + (data.pix_code ? data.pix_code.substring(0, 50) + '...' : 'Não disponível'));
                 }
             } catch (error) {
-                console.error('Erro ao mostrar modal PIX:', error);
                 // Fallback final
                 alert('PIX gerado! Código: ' + (data.pix_code ? data.pix_code.substring(0, 50) + '...' : 'Não disponível'));
             }
@@ -870,7 +855,6 @@
                     gateway: 'syncpay'
                 };
             } catch (error) {
-                console.error('Erro ao criar transação PIX:', error);
                 throw error;
             }
         }

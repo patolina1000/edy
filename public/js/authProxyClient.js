@@ -21,8 +21,6 @@
 
         // 1. Validar se as credenciais existem
         if (!window.SYNCPAY_CONFIG) {
-            alert('❌ ERRO: Configuração SYNCPAY_CONFIG não encontrada!');
-            console.error('SYNCPAY_CONFIG não está definida');
             isAuthenticating = false;
             return;
         }
@@ -30,8 +28,6 @@
         const { client_id, client_secret } = window.SYNCPAY_CONFIG;
 
         if (!client_id || !client_secret) {
-            alert('❌ ERRO: client_id ou client_secret não configurados!\n\nVerifique o arquivo config.js');
-            console.error('Credenciais ausentes:', { client_id: !!client_id, client_secret: !!client_secret });
             isAuthenticating = false;
             return;
         }
@@ -82,10 +78,7 @@
                 throw new Error('Token de acesso não encontrado na resposta');
             }
         })
-        .catch(error => {
-            console.error('❌ Erro na autenticação:', error);
-            alert('❌ ERRO na autenticação:\n\n' + error.message);
-        })
+        .catch(() => {})
         .finally(() => {
             isAuthenticating = false; // Reset da flag
         });

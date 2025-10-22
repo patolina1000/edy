@@ -98,7 +98,6 @@ class PaymentGateway {
       const response = await syncpayPost('/cash-in', syncPayData);
       return response.data;
     } catch (error) {
-      console.error('Erro ao criar pagamento SyncPay:', error.response?.data || error.message);
       throw error;
     }
   }
@@ -108,7 +107,6 @@ class PaymentGateway {
       const response = await syncpayGet(`/transaction/${paymentId}`);
       return response.data;
     } catch (error) {
-      console.error('Erro ao consultar status SyncPay:', error.response?.data || error.message);
       throw error;
     }
   }
@@ -119,7 +117,6 @@ class PaymentGateway {
       const response = await syncpayGet(`/transactions?${queryParams}`);
       return response.data;
     } catch (error) {
-      console.error('Erro ao listar pagamentos SyncPay:', error.response?.data || error.message);
       throw error;
     }
   }
