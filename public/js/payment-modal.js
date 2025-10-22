@@ -411,14 +411,41 @@ class PaymentModal {
         const path = window.location.pathname;
         console.log('🔍 Path atual:', path);
         console.log('🔍 URL completa:', window.location.href);
-        
-    
 
-      const redirectUrl = 'https://typebot.co/compra-privacyofc';
-        
-       
+        const normalizePath = (value) => {
+            if (!value) return '/';
+            try {
+                const url = new URL(value, window.location.origin);
+                value = url.pathname;
+            } catch (error) {
+                console.warn('⚠️ Não foi possível normalizar path, usando valor bruto:', value);
+            }
+            if (value.length > 1 && value.endsWith('/')) {
+                return value.slice(0, -1);
+            }
+            return value || '/';
+        };
+
+        const normalizedPath = normalizePath(path);
+
+        const redirectMap = {
+            '/privacy': '/assinatura-premiada',
+            '/privacy/index.html': '/assinatura-premiada'
+        };
+
+        let redirectUrl = redirectMap[normalizedPath];
+
+        if (!redirectUrl && typeof window.APP_CONFIG === 'object' && window.APP_CONFIG?.redirectUrl) {
+            redirectUrl = window.APP_CONFIG.redirectUrl;
+        }
+
+        if (!redirectUrl) {
+            redirectUrl = 'https://typebot.co/compra-privacyofc';
+        }
+
+        console.log('🔍 Path normalizado:', normalizedPath);
         console.log('🔍 URL de redirecionamento:', redirectUrl);
-        
+
         return redirectUrl;
     }
 
