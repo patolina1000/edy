@@ -65,6 +65,14 @@
       "dest": "/links/index.html"
     },
     {
+      "src": "/presell",
+      "dest": "/public/presell/index.html"
+    },
+    {
+      "src": "/presell/(.*)",
+      "dest": "/public/presell/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/public/$1"
     },
