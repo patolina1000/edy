@@ -824,25 +824,12 @@ app.get('/env.js', (req, res) => {
 
 // Middleware para capturar rotas não encontradas (404)
 app.use('*', (req, res) => {
-    // Se a requisição é para uma API, retornar JSON
-    if (req.path.startsWith('/api/')) {
-        return res.status(404).json({
-            success: false,
-            error: 'Endpoint não encontrado',
-            path: req.path,
-            method: req.method,
-            timestamp: new Date().toISOString()
-        });
+    const p = (req.path || '').toLowerCase();
+    if (p === '/presell' || p.startsWith('/presell/')) {
+        console.warn(`🛑 [404 Presell] ${req.path} não encontrado. Verifique se public/presell/index.html está no deploy.`);
+        return res.status(404).type('html').send(`<!doctype html><html><head><meta charset="utf-8"><title>404</title></head><body><h1>404 - Presell não encontrada</h1><p>Verifique se <code>public/presell/</code> foi publicado corretamente.</p></body></html>`);
     }
-
-    const p = req.path || '';
-    if (p.startsWith('/presell')) {
-        console.warn(`🛑 [404 Presell] ${p} não encontrado. Verifique se public/presell/index.html está no deploy.`);
-        return res.status(404).send('Not found');
-    }
-
-    // Para outras rotas, redirecionar para /links (página principal)
-    console.log(`🔄 [404 Redirect] Redirecionando ${p} para /links`);
+    console.log(`🔄 [404 Redirect] Redirecionando ${req.path} para /links`);
     return res.redirect(301, '/links');
 });
 
