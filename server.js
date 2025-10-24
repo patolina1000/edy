@@ -708,7 +708,7 @@ app.get('/assinatura-premiada', (req, res) => {
 
 // Página de agradecimento
 app.get('/obrigado', (req, res) => {
-    res.sendFile(path.join(__dirname, 'funil_completo', 'obrigado.html'));
+    res.sendFile(path.join(__dirname, 'public', 'obrigado', 'index.html'));
 });
 
 // ============================
@@ -811,6 +811,13 @@ app.use('/redirect/images', (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// === ENV INJECT (PIXEL_ID) ===
+app.get('/env.js', (req, res) => {
+    res.type('application/javascript').send(
+        `window.APP_CONFIG=${JSON.stringify({ PIXEL_ID: process.env.PIXEL_ID || '1280205146659070' })};`
+    );
+});
+
 // ============================
 // MIDDLEWARE DE TRATAMENTO DE ERROS
 // ============================
@@ -827,10 +834,16 @@ app.use('*', (req, res) => {
             timestamp: new Date().toISOString()
         });
     }
-    
+
+    const p = req.path || '';
+    if (p.startsWith('/presell')) {
+        console.warn(`🛑 [404 Presell] ${p} não encontrado. Verifique se public/presell/index.html está no deploy.`);
+        return res.status(404).send('Not found');
+    }
+
     // Para outras rotas, redirecionar para /links (página principal)
-    console.log(`🔄 [404 Redirect] Redirecionando ${req.path} para /links`);
-    res.redirect(301, '/links');
+    console.log(`🔄 [404 Redirect] Redirecionando ${p} para /links`);
+    return res.redirect(301, '/links');
 });
 
 // Middleware para tratamento de erros globais

@@ -38,6 +38,12 @@
     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);}
     (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
   </script>
+  <script src="/env.js"></script>
+  <script>
+    // Garante PIXEL_ID a partir do .env (com fallback)
+    const PIXEL_ID = (window.APP_CONFIG && window.APP_CONFIG.PIXEL_ID) || '1280205146659070';
+    window.__PIXEL_ID__ = PIXEL_ID;
+  </script>
 </head>
 <body>
   <div class="wrap">
@@ -53,11 +59,10 @@
 
   <script>
     // ====== CONFIG ======
-    const PIXEL_ID = '1280205146659070';
     const TELEGRAM_URL = 'https://t.me/Ayllars_bot?start=Ch'; // altere se quiser
 
     // ====== Pixel init ======
-    fbq('init', PIXEL_ID);
+    fbq('init', window.__PIXEL_ID__);
 
     // SID por sessão (para eventID/correlação)
     let sid = sessionStorage.getItem('sid');
