@@ -65,7 +65,7 @@
       "dest": "/links/index.html"
     },
     {
-      "src": "/presell",
+      "src": "/presell/?",
       "dest": "/public/presell/index.html"
     },
     {
