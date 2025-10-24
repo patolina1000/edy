@@ -4,6 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pré-venda | Acesso ao Telegram</title>
+
+  <!-- Canonical/OG atrelados ao domínio do projeto -->
+  <link rel="canonical" href="https://hadriellemaria.online/presell/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Pré-venda | Acesso ao Telegram">
+  <meta property="og:description" content="Continue para acessar o bot no Telegram.">
+  <meta property="og:url" content="https://hadriellemaria.online/presell/">
+  <meta property="twitter:card" content="summary_large_image">
+
+  <!-- Perf: DNS Prefetch / Preconnect -->
+  <link rel="dns-prefetch" href="https://connect.facebook.net">
+  <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
+  <link rel="dns-prefetch" href="https://ipapi.co">
+  <link rel="preconnect" href="https://ipapi.co">
+
   <style>
     :root { --bg:#0f172a; --card:#111827; --txt:#e5e7eb; --pri:#3b82f6; }
     *{box-sizing:border-box} body{margin:0;font-family:system-ui,Segoe UI,Arial;background:var(--bg);color:var(--txt);display:flex;min-height:100vh}
@@ -39,19 +54,19 @@
   <script>
     // ====== CONFIG ======
     const PIXEL_ID = '1280205146659070';
-    const TELEGRAM_URL = 'https://t.me/Ayllars_bot?start=Ch'; // troque se quiser
+    const TELEGRAM_URL = 'https://t.me/Ayllars_bot?start=Ch'; // altere se quiser
 
     // ====== Pixel init ======
     fbq('init', PIXEL_ID);
 
-    // SID por sessão (eventID e correlação)
+    // SID por sessão (para eventID/correlação)
     let sid = sessionStorage.getItem('sid');
     if (!sid) {
       sid = 'SID-' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
       sessionStorage.setItem('sid', sid);
     }
 
-    // Captura UTMs e guarda para uso futuro
+    // Captura UTMs e guarda (útil para etapas seguintes)
     const qs = new URLSearchParams(location.search);
     const utm = {
       utm_source:   qs.get('utm_source')   || '',
@@ -63,10 +78,10 @@
     };
     sessionStorage.setItem('utms', JSON.stringify(utm));
 
-    // PageView imediato com eventID
+    // PageView (imediato) com eventID
     fbq('track','PageView', {}, { eventID: 'pgv:'+sid });
 
-    // Geo assíncrono (não bloqueia) — advanced matching
+    // Geo assíncrono (não bloqueia UI) — advanced matching
     (async () => {
       try {
         const r = await Promise.race([
