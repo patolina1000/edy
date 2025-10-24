@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Obrigado ❤ | Acesso liberado</title>
+
+  <!-- (Opcional) SEO/OG -->
+  <link rel="canonical" href="https://hadriellemaria.online/obrigado/">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Obrigado ❤ | Acesso liberado" />
+  <meta property="og:description" content="Seu acesso foi liberado. Confirme seu e-mail e siga para o Telegram." />
+  <meta property="og:url" content="https://hadriellemaria.online/obrigado/" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Perf -->
+  <link rel="dns-prefetch" href="https://connect.facebook.net">
+  <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
+  <link rel="dns-prefetch" href="https://ipapi.co">
+  <link rel="preconnect" href="https://ipapi.co">
+
+  <style>
+    :root { --bg:#0f172a; --card:#0b1220; --txt:#e5e7eb; --muted:#94a3b8; --pri:#3b82f6; --ok:#16a34a; }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:var(--bg); color:var(--txt); min-height:100vh; display:flex}
+    .wrap{margin:auto; width:100%; max-width:560px; padding:20px}
+    .card{background:linear-gradient(180deg, var(--card), #0e1628); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:28px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    h1{margin:0 0 6px; font-size:26px}
+    p{margin:0 0 14px; color:var(--muted)}
+    .row{display:grid; gap:12px; margin-top:16px}
+    input[type="email"]{width:100%; background:#0a1120; color:var(--txt); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px 14px; font-size:16px; outline:none}
+    input[type="email"]::placeholder{color:#64748b}
+    button{width:100%; border:0; border-radius:10px; padding:12px 16px; font-size:16px; font-weight:700; cursor:pointer; background:var(--pri); color:#fff; transition:opacity .2s ease}
+    button:disabled{opacity:.6; cursor:not-allowed}
+    .hint{font-size:12px; color:#94a3b8; margin-top:6px}
+    .ok{color:#22c55e}
+  </style>
+
+  <!-- Meta Pixel loader -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);}
+    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Pagamento aprovado! <span class="ok">✔</span></h1>
+      <p>Confirme seu e-mail para personalizar seu acesso e seguir para o Telegram.</p>
+
+      <form id="accessForm" class="row" autocomplete="on">
+        <input type="email" id="emailInput" placeholder="Digite seu e-mail (opcional, mas recomendado)" />
+        <button id="goBtn" type="submit" disabled>Continuar para o Telegram</button>
+        <div class="hint">Se não quiser informar o e-mail, você será redirecionado automaticamente em alguns segundos.</div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ====== CONFIG ======
+    const CONFIG = {
+      PIXEL_ID: '1280205146659070',
+      REDIRECT_URL: 'https://t.me/+KWL7h12wEjADYx', // <- ajuste para a "página correta"
+      VALUE_DEFAULT: 19.90,
+      // timer dinâmico
+      BASE_MS: /Mobi|Android/i.test(navigator.userAgent) ? 6000 : 4000, // 6s mobile, 4s desktop
+      EXTEND_MS: 4000,    // +4s quando digitar
+      HARD_CAP_MS: 12000, // teto absoluto: 12s
+      REDIRECT_DELAY_MS: 800, // buffer p/ Pixel enfileirar antes de sair
+      REDIRECT_ON_FALLBACK: true // redireciona mesmo sem e-mail quando o timer estourar
+    };
+
+    // ====== PIXEL ======
+    fbq('init', CONFIG.PIXEL_ID);
+    fbq('track', 'PageView', {}, { eventID: 'pgv:' + Date.now() });
+
+    // Geo assíncrono (advanced matching) — não bloqueia nada
+    (async () => {
+      try {
+        const r = await Promise.race([
+          fetch('https://ipapi.co/json/'),
+          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')), 800))
+        ]);
+        const d = r && (await r.json ? await r.json() : null) || {};
+        fbq('set','user', {
+          ct: (d.city || ""),
+          st: (d.region || ""),
+          zp: (d.postal || ""),
+          country: (d.country_name || "")
+        });
+      } catch(e) {}
+    })();
+
+    // ====== TX & VALUE ======
+    const qs = new URLSearchParams(location.search);
+    const tx = qs.get('tx') || sessionStorage.getItem('tx') || ('TX-' + Date.now());
+    const valueParam = parseFloat(qs.get('v'));
+    const value = Number.isFinite(valueParam) ? valueParam : CONFIG.VALUE_DEFAULT;
+    sessionStorage.setItem('tx', tx);
+
+    // ====== HÍBRIDO: Purchase 1x com eventID ======
+    const firedKey = 'purchaseFired:' + tx;
+    let fired = !!sessionStorage.getItem(firedKey);
+    let redirected = false;
+
+    function firePurchaseOnce() {
+      if (fired) return;
+      fired = true;
+      const eventID = 'pur:' + tx;
+      fbq('track', 'Purchase', { value, currency: 'BRL', transaction_id: tx }, { eventID });
+      sessionStorage.setItem(firedKey, '1');
+
+      // redireciona no fallback mesmo sem e-mail (se habilitado)
+      if (CONFIG.REDIRECT_ON_FALLBACK && !redirected) {
+        redirected = true;
+        setTimeout(() => { location.href = CONFIG.REDIRECT_URL; }, CONFIG.REDIRECT_DELAY_MS);
+      }
+    }
+
+    // Timer base + extensão quando digitar (com teto)
+    let start = performance.now();
+    let deadline = start + CONFIG.BASE_MS;
+    let timer = setTimeout(firePurchaseOnce, CONFIG.BASE_MS);
+
+    // ====== FORM ======
+    const form = document.getElementById('accessForm');
+    const emailInput = document.getElementById('emailInput');
+    const goBtn = document.getElementById('goBtn');
+
+    const isValidEmail = (e) => /\S+@\S+\.\S+/.test(e);
+    emailInput.addEventListener('input', () => {
+      const ok = isValidEmail(emailInput.value.trim());
+      goBtn.disabled = !ok;
+
+      // estende o timer quando o usuário está digitando (até o teto)
+      if (!fired) {
+        const now = performance.now();
+        const cap = start + CONFIG.HARD_CAP_MS;
+        deadline = Math.min(deadline + CONFIG.EXTEND_MS, cap);
+        const rem = Math.max(0, deadline - now);
+        clearTimeout(timer);
+        timer = setTimeout(firePurchaseOnce, rem);
+      }
+    });
+
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const em = (emailInput.value || '').trim();
+      if (em) fbq('set','user', { em }); // Pixel faz o hash automaticamente
+
+      clearTimeout(timer);
+      firePurchaseOnce(); // dispara agora (se ainda não foi)
+      if (!redirected) {
+        redirected = true;
+        setTimeout(() => { location.href = CONFIG.REDIRECT_URL; }, CONFIG.REDIRECT_DELAY_MS);
+      }
+    });
+
+    // Se a aba ficar oculta, dispara já (evita perder a conversão)
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') firePurchaseOnce();
+    });
+  </script>
+
+  <noscript>
+    <img height="1" width="1" style="display:none"
+         src="https://www.facebook.com/tr?id=1280205146659070&ev=PageView&noscript=1" />
+  </noscript>
+</body>
+</html>
