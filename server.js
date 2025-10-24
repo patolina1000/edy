@@ -775,10 +775,12 @@ app.use('/compra-aprovada', express.static(path.join(__dirname, 'compra-aprovada
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Página de pré-venda (presell)
-app.get('/presell', (req, res) => res.redirect(301, '/presell/'));
+app.get(['/presell', '/presell/'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'presell', 'index.html'));
+});
 app.use(
     '/presell',
-    express.static(path.join(__dirname, 'public', 'presell'), { redirect: true })
+    express.static(path.join(__dirname, 'public', 'presell'), { redirect: false })
 );
 
 // Servir arquivos estáticos do funil completo
