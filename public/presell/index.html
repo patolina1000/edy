@@ -17,7 +17,6 @@
   <link rel="dns-prefetch" href="https://ipapi.co">
   <link rel="preconnect" href="https://ipapi.co">
 
-  <link rel="preload" as="image" href="/images/perfil.jpg">
   <link rel="stylesheet" href="/theme/overrides.css">
   <style>
     :root {
@@ -131,7 +130,7 @@
       }
     }
 
-    /* === Intersticial VIP === */
+    /* === Intersticial VIP (neon + progresso) === */
     .vip-wrap{display:none}
     .vip-card{
       position:relative;background:#0f1426;border-radius:20px;padding:28px;
@@ -141,23 +140,25 @@
         0 0 120px rgba(79,70,229,.18),
         inset 0 0 0 1px rgba(255,255,255,.03);
     }
-    .vip-head{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+    .vip-head{display:flex;gap:12px;align-items:center;margin-bottom:12px;justify-content:center}
     .vip-tele{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,#36b6ff,#6f8cff)}
     .vip-tele::before{content:'✈';color:#fff;font-size:28px;font-weight:900;transform:translateY(-2px)}
     .vip-avatar{width:56px;height:56px;border-radius:14px;object-fit:cover;box-shadow:0 8px 20px rgba(0,0,0,.35)}
-    .vip-title{font-size:28px;font-weight:900;text-align:center;margin:6px 0 8px}
+    .vip-title{font-size:28px;font-weight:900;text-align:center;margin:10px 0 8px}
     .vip-title span{background:linear-gradient(90deg,#ff4ec8,#9b5cff);-webkit-background-clip:text;color:transparent}
     .vip-sub{opacity:.85;text-align:center;margin:0 0 16px}
     .vip-badge{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,0,153,.08);
       border:1px solid rgba(255,0,153,.25);border-radius:12px;padding:10px 12px;margin:10px 0 16px}
     .vip-badge .flame{font-size:16px}
     .vip-progress{height:10px;background:#2b3246;border-radius:8px;overflow:hidden}
-    .vip-bar{height:100%;width:0%;background:linear-gradient(90deg,#ff35b1,#7c3aed);}
+    .vip-bar{height:100%;width:0%;background:linear-gradient(90deg,#ff35b1,#7c3aed)}
     .vip-count{font-size:14px;opacity:.8;text-align:center;margin-top:10px}
   </style>
+  <link rel="preload" as="image" href="/images/perfil.jpg">
 </head>
 <body>
   <main class="container">
+    <!-- === BLOCO NORMAL (seu card atual) === -->
     <div class="normal-wrap">
       <section class="card">
         <div class="hero">
@@ -173,17 +174,18 @@
         <p class="note"><small>Ao continuar, você concorda com nossos termos.</small></p>
       </section>
     </div>
+    <!-- === INTERSTICIAL (neon + barra + contador) — começa oculto === -->
     <div class="vip-wrap">
       <div class="card vip-card">
         <div class="vip-head">
           <div class="vip-tele" aria-hidden="true"></div>
           <img class="vip-avatar" src="/images/perfil.jpg" alt="Hadrielle" width="56" height="56" loading="eager" fetchpriority="high">
         </div>
-        <h1 class="vip-title">Estamos preparando seu <span>acesso VIP…</span></h1>
+        <h1 class="vip-title">Estamos preparando seu <span>acesso VIP...</span></h1>
         <p class="vip-sub">Aguarde alguns segundos enquanto configuramos<br>seu acesso exclusivo.</p>
         <div class="vip-badge"><span class="flame">🔥</span> <span>92% das vagas já foram preenchidas</span></div>
         <div class="vip-progress"><div class="vip-bar" id="vipBar"></div></div>
-        <div class="vip-count" id="vipCount">Redirecionando em 3 segundos…</div>
+        <div class="vip-count" id="vipCount">Redirecionando em 3 segundos...</div>
       </div>
     </div>
   </main>
@@ -198,9 +200,6 @@
   </script>
 
   <script>
-    // ====== CONFIG (ajuste só o TELEGRAM_URL) ======
-    const TELEGRAM_URL = 'https://t.me/Ayllars_bot?start=Ch';
-
     // Expor/obter Pixel ID ANTES do init
     window.__PIXEL_ID__ = (window.APP_CONFIG && window.APP_CONFIG.PIXEL_ID) || '1280205146659070';
     fbq('init', window.__PIXEL_ID__);
@@ -236,40 +235,48 @@
     // ViewContent
     fbq('track', 'ViewContent', {content_name:'presell'}, {eventID: 'vc:' + sid});
 
-    // CTA
-    const cta = document.getElementById('cta-telegram');
-    const normal = document.querySelector('.normal-wrap');
-    const vip = document.querySelector('.vip-wrap');
-    const bar = document.getElementById('vipBar');
-    const count = document.getElementById('vipCount');
+    // ====== TROCAR SOMENTE O HANDLER DO CTA ======
+    const TELEGRAM_URL = typeof window !== 'undefined' && typeof window.TELEGRAM_URL !== 'undefined'
+      ? window.TELEGRAM_URL
+      : 'https://t.me/Ayllars_bot?start=Ch'; // ajuste se necessário
+
+    const cta   = document.getElementById('cta-telegram');
+    const normal= document.querySelector('.normal-wrap');
+    const vip   = document.querySelector('.vip-wrap');
+    const barEl = document.getElementById('vipBar');
+    const cntEl = document.getElementById('vipCount');
 
     function startVipRedirect(seconds){
       const total = seconds*1000;
       const t0 = performance.now();
       function tick(ts){
         const p = Math.min((ts - t0)/total, 1);
-        if (bar) {
-          bar.style.width = (p*100) + '%';
+        if (barEl) {
+          barEl.style.width = (p*100) + '%';
         }
         const remaining = Math.max(0, Math.ceil(seconds - p*seconds));
-        if (count) {
-          count.textContent = `Redirecionando em ${remaining} segundos…`;
+        if (cntEl) {
+          cntEl.textContent = `Redirecionando em ${remaining} segundos...`;
         }
         if(p<1){ requestAnimationFrame(tick); } else { location.href = TELEGRAM_URL; }
       }
       requestAnimationFrame(tick);
     }
 
-    cta?.addEventListener('click', (ev)=>{
-      ev.preventDefault();
-      // tracking preservado
-      fbq('trackCustom','PresellCTAClick', {}, { eventID: 'cta:'+sid });
-      // troca UI → intersticial
-      if (normal) normal.style.display = 'none';
-      if (vip) vip.style.display = 'block';
-      // inicia animação + redirect (3s)
-      startVipRedirect(3);
-    });
+    if (cta) {
+      cta.addEventListener('click', (ev)=>{
+        ev.preventDefault();
+        // mantém o tracking do clique
+        fbq('trackCustom','PresellCTAClick', {}, { eventID: 'cta:' + sid });
+
+        // troca a UI: esconde card normal e mostra o intersticial neon
+        if (normal) normal.style.display = 'none';
+        if (vip)    vip.style.display = 'block';
+
+        // inicia barra + countdown (3s) e redireciona
+        startVipRedirect(3);
+      }, { once:true });
+    }
   </script>
 </body>
 </html>
