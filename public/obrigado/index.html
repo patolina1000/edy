@@ -328,7 +328,7 @@
   <script>
     // ====== CONFIG (ajuste URL/redirecionamento/valores se quiser) ======
     const CONFIG = {
-      PIXEL_ID: (window.APP_CONFIG && window.APP_CONFIG.PIXEL_ID) || '1280205146659070',
+      PIXEL_ID: (window.APP_CONFIG && window.APP_CONFIG.PIXEL_ID) || '1121956893430027',
       VALUE_DEFAULT: 19.90,
       BASE_MS: 10000,     // 10s sem digitar email (mobile e desktop)
       EXTEND_MS: 20000,   // +20s se digitar e-mail (total 30s)
@@ -382,17 +382,17 @@
             if (d.countryCode) am.country = d.countryCode;
             
             // Init com Advanced Matching
-            fbq('init', '1280205146659070', am);
+            fbq('init', '1121956893430027', am);
             console.log('✅ Pixel inicializado com Advanced Matching:', am);
           } else {
-            fbq('init', '1280205146659070');
+            fbq('init', '1121956893430027');
           }
         } else {
-          fbq('init', '1280205146659070');
+          fbq('init', '1121956893430027');
         }
       } catch (error) {
         console.warn('❌ Erro na geolocalização:', error);
-        fbq('init', '1280205146659070');
+        fbq('init', '1121956893430027');
       }
 
       // Dispara PageView com eventID único
