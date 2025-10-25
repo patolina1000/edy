@@ -129,32 +129,30 @@
         padding: 28px 22px;
       }
     }
-
-    /* === Intersticial VIP (neon + progresso) === */
-    .vip-wrap{display:none}
-    .vip-card{
-      position:relative;background:#0f1426;border-radius:20px;padding:28px;
-      border:1px solid rgba(255,0,153,.25);
-      box-shadow:
-        0 0 60px rgba(255,0,153,.25),
-        0 0 120px rgba(79,70,229,.18),
-        inset 0 0 0 1px rgba(255,255,255,.03);
-    }
-    .vip-head{display:flex;gap:12px;align-items:center;margin-bottom:12px;justify-content:center}
-    .vip-tele{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,#36b6ff,#6f8cff)}
-    .vip-tele::before{content:'✈';color:#fff;font-size:28px;font-weight:900;transform:translateY(-2px)}
-    .vip-avatar{width:56px;height:56px;border-radius:14px;object-fit:cover;box-shadow:0 8px 20px rgba(0,0,0,.35)}
-    .vip-title{font-size:28px;font-weight:900;text-align:center;margin:10px 0 8px}
-    .vip-title span{background:linear-gradient(90deg,#ff4ec8,#9b5cff);-webkit-background-clip:text;color:transparent}
-    .vip-sub{opacity:.85;text-align:center;margin:0 0 16px}
-    .vip-badge{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,0,153,.08);
-      border:1px solid rgba(255,0,153,.25);border-radius:12px;padding:10px 12px;margin:10px 0 16px}
-    .vip-badge .flame{font-size:16px}
-    .vip-progress{height:10px;background:#2b3246;border-radius:8px;overflow:hidden}
-    .vip-bar{height:100%;width:0%;background:linear-gradient(90deg,#ff35b1,#7c3aed)}
-    .vip-count{font-size:14px;opacity:.8;text-align:center;margin-top:10px}
   </style>
   <link rel="preload" as="image" href="/images/perfil.jpg">
+  <style>
+  /* === Intersticial VIP (neon + progresso) === */
+  .vip-wrap{display:none}
+  .vip-card{
+    position:relative;background:#0f1426;border-radius:20px;padding:28px;
+    border:1px solid rgba(255,0,153,.25);
+    box-shadow:0 0 60px rgba(255,0,153,.25),0 0 120px rgba(79,70,229,.18),inset 0 0 0 1px rgba(255,255,255,.03);
+  }
+  .vip-head{display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:12px}
+  .vip-tele{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,#36b6ff,#6f8cff)}
+  .vip-tele::before{content:'✈';color:#fff;font-size:28px;font-weight:900;transform:translateY(-2px)}
+  .vip-avatar{width:56px;height:56px;border-radius:14px;object-fit:cover;box-shadow:0 8px 20px rgba(0,0,0,.35)}
+  .vip-title{font-size:28px;font-weight:900;text-align:center;margin:10px 0 8px}
+  .vip-title span{background:linear-gradient(90deg,#ff4ec8,#9b5cff);-webkit-background-clip:text;color:transparent}
+  .vip-sub{opacity:.85;text-align:center;margin:0 0 16px}
+  .vip-badge{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,0,153,.08);
+    border:1px solid rgba(255,0,153,.25);border-radius:12px;padding:10px 12px;margin:10px 0 16px}
+  .vip-badge .flame{font-size:16px}
+  .vip-progress{height:10px;background:#2b3246;border-radius:8px;overflow:hidden}
+  .vip-bar{height:100%;width:0%;background:linear-gradient(90deg,#ff35b1,#7c3aed)}
+  .vip-count{font-size:14px;opacity:.8;text-align:center;margin-top:10px}
+  </style>
 </head>
 <body>
   <main class="container">
@@ -235,48 +233,34 @@
     // ViewContent
     fbq('track', 'ViewContent', {content_name:'presell'}, {eventID: 'vc:' + sid});
 
+    // ... seu JS acima permanece igual (fbq init, sid, ViewContent etc.)
     // ====== TROCAR SOMENTE O HANDLER DO CTA ======
-    const TELEGRAM_URL = typeof window !== 'undefined' && typeof window.TELEGRAM_URL !== 'undefined'
-      ? window.TELEGRAM_URL
-      : 'https://t.me/Ayllars_bot?start=Ch'; // ajuste se necessário
-
-    const cta   = document.getElementById('cta-telegram');
-    const normal= document.querySelector('.normal-wrap');
-    const vip   = document.querySelector('.vip-wrap');
-    const barEl = document.getElementById('vipBar');
-    const cntEl = document.getElementById('vipCount');
+    const TELEGRAM_URL = 'https://t.me/Ayllars_bot?start=Ch'; // ajuste se quiser
+    const cta    = document.getElementById('cta-telegram');
+    const normal = document.querySelector('.normal-wrap');
+    const vip    = document.querySelector('.vip-wrap');
+    const barEl  = document.getElementById('vipBar');
+    const cntEl  = document.getElementById('vipCount');
 
     function startVipRedirect(seconds){
-      const total = seconds*1000;
-      const t0 = performance.now();
+      const total = seconds*1000; const t0 = performance.now();
       function tick(ts){
         const p = Math.min((ts - t0)/total, 1);
-        if (barEl) {
-          barEl.style.width = (p*100) + '%';
-        }
+        barEl.style.width = (p*100) + '%';
         const remaining = Math.max(0, Math.ceil(seconds - p*seconds));
-        if (cntEl) {
-          cntEl.textContent = `Redirecionando em ${remaining} segundos...`;
-        }
+        cntEl.textContent = `Redirecionando em ${remaining} segundos...`;
         if(p<1){ requestAnimationFrame(tick); } else { location.href = TELEGRAM_URL; }
       }
       requestAnimationFrame(tick);
     }
 
-    if (cta) {
-      cta.addEventListener('click', (ev)=>{
-        ev.preventDefault();
-        // mantém o tracking do clique
-        fbq('trackCustom','PresellCTAClick', {}, { eventID: 'cta:' + sid });
-
-        // troca a UI: esconde card normal e mostra o intersticial neon
-        if (normal) normal.style.display = 'none';
-        if (vip)    vip.style.display = 'block';
-
-        // inicia barra + countdown (3s) e redireciona
-        startVipRedirect(3);
-      }, { once:true });
-    }
+    cta?.addEventListener('click', (ev)=>{
+      ev.preventDefault();
+      fbq('trackCustom','PresellCTAClick', {}, { eventID: 'cta:' + sid });
+      normal && (normal.style.display = 'none');
+      vip && (vip.style.display = 'block');
+      startVipRedirect(3); // mude para 5 se quiser
+    }, { once:true });
   </script>
 </body>
 </html>
