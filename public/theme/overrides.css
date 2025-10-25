@@ -71,3 +71,14 @@ body{
 .kv{ color: var(--muted); font-size: 14px; }
 .kv strong{ color: var(--text); }
 
+
+/* Avatar baseado em imagem real */
+.avatar-photo{
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 10px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.35), inset 0 0 0 2px rgba(255,255,255,.06);
+}
