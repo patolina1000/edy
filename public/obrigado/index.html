@@ -14,25 +14,299 @@
 
   <link rel="dns-prefetch" href="https://connect.facebook.net">
   <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
-  <link rel="dns-prefetch" href="https://ipapi.co">
-  <link rel="preconnect" href="https://ipapi.co">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="/theme/overrides.css">
+  <style>
+    :root {
+      --bg1: #0a0f2c;
+      --bg2: #1a1440;
+      --brand1: #ff007f;
+      --brand2: #7928ca;
+      --text: #ffffff;
+      --muted: #aaa4d6;
+      --shadow-color: rgba(255, 0, 128, 0.3);
+      --success: #00d084;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at top, var(--bg1), var(--bg2));
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .card {
+      padding: 36px 28px;
+      border-radius: 20px;
+      background: rgba(20, 20, 40, 0.55);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 40px var(--shadow-color), 0 0 80px var(--shadow-color);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Efeito glow animado */
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 22px;
+      padding: 2px;
+      background: linear-gradient(135deg, var(--brand1), var(--brand2), #00c6ff);
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      animation: glow 6s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes glow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    .hero {
+      margin-bottom: 24px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .avatar-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      object-fit: cover;
+      box-shadow: 0 0 20px rgba(255, 0, 127, 0.5), 0 0 30px rgba(121, 40, 202, 0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .avatar-photo:hover {
+      transform: scale(1.05);
+    }
+
+    .ok-badge {
+      position: absolute;
+      top: -5px;
+      right: calc(50% - 50px);
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--success), #00a86b);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 0 20px rgba(0, 208, 132, 0.6);
+      animation: checkPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes checkPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .telegram-logo {
+      width: 70px;
+      height: 70px;
+      filter: drop-shadow(0 0 8px rgba(0, 198, 255, 0.6));
+    }
+
+    h1 {
+      font-size: clamp(22px, 5vw, 28px);
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 10px;
+      text-shadow: 0 0 14px rgba(255, 0, 127, 0.6), 0 0 24px rgba(0, 198, 255, 0.4);
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, var(--brand1), var(--brand2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .kv {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: block;
+      text-align: left;
+    }
+
+    .kv strong {
+      color: var(--brand1);
+      font-weight: 600;
+    }
+
+    .email-label {
+      display: inline-block;
+      background: rgba(255, 0, 127, 0.08);
+      border: 1px solid rgba(255, 0, 127, 0.25);
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 14px;
+      margin-bottom: 16px;
+      color: #ff80b5;
+      text-shadow: 0 0 8px rgba(255, 0, 127, 0.3);
+      font-weight: 600;
+      text-align: center;
+      width: 100%;
+    }
+
+    .form {
+      margin: 20px 0;
+    }
+
+    .input {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 15px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      outline: none;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .input::placeholder {
+      color: rgba(170, 164, 214, 0.5);
+    }
+
+    .input:focus {
+      border-color: var(--brand1);
+      box-shadow: 0 0 0 3px rgba(255, 0, 127, 0.1);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 16px 32px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(90deg, var(--brand1), var(--brand2));
+      border: none;
+      border-radius: 12px;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255, 0, 127, 0.6), 0 0 30px rgba(120, 40, 202, 0.6);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 10;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(255, 0, 127, 0.8), 0 0 40px rgba(120, 40, 202, 0.8);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .note {
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--muted);
+      opacity: 0.7;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
+
+      .card {
+        padding: 28px 20px;
+      }
+
+      .avatar-photo {
+        width: 70px;
+        height: 70px;
+      }
+
+      .telegram-logo {
+        width: 60px;
+        height: 60px;
+      }
+
+      .ok-badge {
+        width: 28px;
+        height: 28px;
+        font-size: 18px;
+      }
+    }
+  </style>
+  <link rel="preload" as="image" href="/images/perfil.jpg">
 </head>
 <body>
   <main class="container">
     <section class="card">
       <div class="hero">
-        <img class="avatar-photo" src="/images/perfil.jpg" alt="Hadrielle Maria" width="128" height="128" loading="lazy">
-        <div class="ok-badge" aria-hidden="true">✓</div>
-        <h1 class="title">Pagamento confirmado!</h1>
+        <div class="header">
+          <svg class="telegram-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+            <defs>
+              <linearGradient id="telegram-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#2AABEE;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#229ED9;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <circle cx="120" cy="120" r="120" fill="url(#telegram-gradient)"/>
+            <path fill="#fff" d="M81.229 128.772l14.237 39.406s1.78 3.687 3.686 3.687 30.255-29.492 30.255-29.492l31.525-60.89L81.737 118.6z"/>
+            <path fill="#d2e5f1" d="M100.106 138.878l-2.733 29.046s-1.144 8.9 7.754 0 17.415-15.763 17.415-15.763"/>
+            <path fill="#b5cfe4" d="M81.486 130.178l-17.8-5.467s-2.006-.797-1.357-2.615c.136-.385.405-.732.82-1.091 3.957-3.365 74.654-28.256 74.654-28.256s2.732-1.022 4.339-.98c.707.019 1.243.273 1.555.88.155.303.235.67.235 1.09l-.017.308s-.085.765-.256 1.988c-.172 1.223-11.802 53.52-11.802 53.52s-.68 2.786-3.158 2.871c-1.306.045-2.984-.518-5.38-1.8-4.53-2.423-19.833-13.713-23.31-16.076-.903-.614-1.777-1.753-.133-3.227 3.688-3.305 8.16-7.646 10.85-10.457.838-.87 1.683-2.867-.918-1.635-10.522 4.957-25.294 16.77-27.72 18.524-.435.315-1.02.527-1.745.523z"/>
+          </svg>
+          <img class="avatar-photo" src="/images/perfil.jpg" alt="Hadrielle Maria" width="80" height="80" loading="eager" fetchpriority="high">
+          <div class="ok-badge" aria-hidden="true">✓</div>
+        </div>
+        
+        <h1>Pagamento <span>confirmado!</span></h1>
         <p class="subtitle">Seu acesso foi liberado. Siga para o Telegram.</p>
-        <p class="kv">Transação: <strong id="tx-view">--</strong></p>
       </div>
 
       <div class="form">
         <form id="accessForm" onsubmit="return false;">
-          <label for="emailInput" class="kv">E-mail (opcional, melhora o rastreamento)</label>
+          <label for="emailInput" class="email-label">⚡ Para liberar seu acesso ao conteúdo, coloque seu email</label>
           <input id="emailInput" class="input" type="email" placeholder="seu@email.com" />
           <button id="goBtn" class="btn">Ir para o Telegram</button>
         </form>
@@ -55,47 +329,97 @@
     // ====== CONFIG (ajuste URL/redirecionamento/valores se quiser) ======
     const CONFIG = {
       PIXEL_ID: (window.APP_CONFIG && window.APP_CONFIG.PIXEL_ID) || '1280205146659070',
-      REDIRECT_URL: 'https://t.me/+KWL7h12wEjADYx',
       VALUE_DEFAULT: 19.90,
-      BASE_MS: /Mobi|Android/i.test(navigator.userAgent) ? 6000 : 4000, // 6s mobile / 4s desktop
-      EXTEND_MS: 4000,    // +4s se digitar e-mail
-      HARD_CAP_MS: 12000, // teto; ajuste para 20000 se quiser 20s
-      REDIRECT_ON_FALLBACK: true
+      BASE_MS: 10000,     // 10s sem digitar email (mobile e desktop)
+      EXTEND_MS: 20000,   // +20s se digitar e-mail (total 30s)
+      HARD_CAP_MS: 30000, // teto de 30 segundos
+      REDIRECT_ON_FALLBACK: true,
+      
+      // Mapeamento de grupos do Telegram
+      TELEGRAM_GROUPS: {
+        'g1': 'https://t.me/+Krnm4Q0lKPY2NWMx',  // Hadrielle Maria | PUTINHA
+        'g2': 'https://t.me/+DSdILVIkEQBhNGFh',  // Hadrielle | QUARTO SECRETO
+        'g3': 'https://t.me/+mbcLV6pxk7U3ZWYx',  // HADRIELLE | GALERIA COMPLETA
+        'g4': 'https://t.me/+hCJVBQsyMWxhMmUx',  // Hadrielle | FILA DE ESPERA
+        'g5': 'https://t.me/+5BvEo0apdXJjMjEx',  // HADRIELLE | WHATSAPP
+        'g6': 'https://t.me/+UAELENXvsYAyN2Mx',  // Hadrielle | agendamentos
+      },
+      DEFAULT_GROUP: 'https://t.me/+Krnm4Q0lKPY2NWMx' // Grupo padrão (G1)
     };
 
-    // Init Pixel ANTES de usar fbq
-    fbq('init', CONFIG.PIXEL_ID);
-
-    // Obter tx e value
+    // Obter parâmetros da URL
     const params = new URLSearchParams(location.search);
     const tx = (params.get('tx') || sessionStorage.getItem('tx') || ('TX-' + Date.now()));
     const value = parseFloat(params.get('v') || CONFIG.VALUE_DEFAULT);
+    const grupo = params.get('g'); // Parâmetro do grupo (g1, g2, g3...)
+    
+    // Determinar URL de redirecionamento baseado no grupo
+    const REDIRECT_URL = grupo && CONFIG.TELEGRAM_GROUPS[grupo] 
+      ? CONFIG.TELEGRAM_GROUPS[grupo] 
+      : CONFIG.DEFAULT_GROUP;
+    
+    console.log('🎯 Grupo detectado:', grupo || 'padrão');
+    console.log('📍 Redirecionará para:', REDIRECT_URL);
 
-    // Mostrar tx
-    (function(){
-      const el = document.getElementById('tx-view');
-      if (el && tx) el.textContent = tx;
-    })();
+    // Init Pixel com Advanced Matching + PageView
+    (async function(){
+      try {
+        console.log('📍 Detectando localização com IP-API PRO...');
+        const response = await fetch('https://pro.ip-api.com/json/?key=R1a8D9VJfrqTqpY&fields=status,country,countryCode,region,city,zip', {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        });
+        
+        if (response.ok) {
+          const d = await response.json();
+          
+          if (d.status === 'success') {
+            // Monta Advanced Matching corretamente
+            const am = {};
+            if (d.city) am.ct = d.city;
+            if (d.region) am.st = d.region;
+            if (d.zip) am.zp = d.zip;
+            if (d.countryCode) am.country = d.countryCode;
+            
+            // Init com Advanced Matching
+            fbq('init', '1280205146659070', am);
+            console.log('✅ Pixel inicializado com Advanced Matching:', am);
+          } else {
+            fbq('init', '1280205146659070');
+          }
+        } else {
+          fbq('init', '1280205146659070');
+        }
+      } catch (error) {
+        console.warn('❌ Erro na geolocalização:', error);
+        fbq('init', '1280205146659070');
+      }
 
-    // PageView
-    fbq('track','PageView', {}, {eventID: 'pgv:' + Date.now()});
-
-    // AM geo
-    (function(){
-      const ctl = new AbortController(); const to = setTimeout(()=>ctl.abort(), 800);
-      fetch('https://ipapi.co/json', {signal: ctl.signal}).then(r=>r.json()).then(d=>{
-        clearTimeout(to);
-        const am={}; if(d){ if(d.country)am.ct=d.country; if(d.city)am.cty=d.city; if(d.region)am.st=d.region; if(d.postal)am.zp=d.postal; }
-        if(Object.keys(am).length) fbq('set','user',am);
-      }).catch(()=>{});
+      // Dispara PageView com eventID único
+      fbq('track','PageView', {}, {eventID: 'pgv:' + Date.now()});
     })();
 
     // Disparo Purchase
     let fired = false;
     function firePurchase(reason){
       if (fired) return; fired = true;
+      
+      // ✅ SEMPRE tenta enviar email ANTES do Purchase (se tiver)
+      const em = (emailInput && emailInput.value || '').trim();
+      if (em) {
+        fbq('set','user',{ em });
+        console.log('📧 Email enviado ao Pixel:', em);
+      }
+      
+      // Envia Purchase
       fbq('track','Purchase', { value, currency:'BRL', transaction_id: tx }, { eventID: 'pur:' + tx });
-      if (CONFIG.REDIRECT_ON_FALLBACK) setTimeout(()=>{ location.href = CONFIG.REDIRECT_URL; }, 800);
+      console.log(`💰 Purchase enviado (${reason}):`, { value, tx });
+      
+      // Redireciona
+      if (CONFIG.REDIRECT_ON_FALLBACK) {
+        console.log('🚀 Redirecionando para:', REDIRECT_URL);
+        setTimeout(()=>{ location.href = REDIRECT_URL; }, 800);
+      }
     }
 
     // Timer inteligente
@@ -103,17 +427,22 @@
     const goBtn = document.getElementById('goBtn');
 
     let total = CONFIG.BASE_MS;
-    if (emailInput) emailInput.addEventListener('input', ()=>{ total = Math.min(CONFIG.HARD_CAP_MS, CONFIG.BASE_MS + CONFIG.EXTEND_MS); });
+    if (emailInput) emailInput.addEventListener('input', ()=>{ 
+      total = Math.min(CONFIG.HARD_CAP_MS, CONFIG.BASE_MS + CONFIG.EXTEND_MS);
+      console.log('⏱️ Timer estendido para:', total / 1000, 'segundos');
+    });
 
     if (goBtn) {
       goBtn.addEventListener('click', ()=>{
-        const em = (emailInput && emailInput.value || '').trim();
-        if (em) fbq('set','user',{ em }); // Pixel hasheia
-        firePurchase('cta');
+        console.log('🖱️ Botão clicado pelo usuário');
+        firePurchase('button');
       });
     }
 
-    setTimeout(()=>firePurchase('timer'), total);
+    setTimeout(()=>{
+      console.log('⏰ Timer expirou, disparando Purchase');
+      firePurchase('timer');
+    }, total);
   </script>
 </body>
 </html>

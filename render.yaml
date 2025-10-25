@@ -1,0 +1,60 @@
+services:
+  - type: web
+    name: hadrielle-site
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GATEWAY
+        value: pushinpay
+      - key: ENVIRONMENT
+        value: production
+      - key: GENERATE_QR_CODE_ON_MOBILE
+        value: true
+      - key: SYNCPAY_CLIENT_ID
+        value: 708ddc0b-357d-4548-b158-615684caa616
+      - key: SYNCPAY_CLIENT_SECRET
+        value: c08d40e5-3049-48c9-85c0-fd3cc6ca502c
+      - key: PUSHINPAY_TOKEN
+        value: 45135|XFE5jjzsKTBY4PN1RXFIe7EISDX2DEHFukqMfii897180772
+      - key: WEBHOOK_BASE_URL
+        sync: false
+      - key: WEBHOOK_SECRET
+        value: ""
+      - key: MODEL_NAME
+        value: Hadrielle Maria
+      - key: MODEL_HANDLE
+        value: eu.mihalyc
+      - key: MODEL_BIO
+        value: "Tenho 22 aninhos… com os peitos perfeitos pra tu apertar enquanto mete gostoso, e a BUNDA MAIS GOSTOSA que você vai ver! 🍑"
+      - key: PLAN_MONTHLY_BUTTON_ID
+        value: btn-1-mes
+      - key: PLAN_MONTHLY_LABEL
+        value: 1 mês
+      - key: PLAN_MONTHLY_PRICE_LABEL
+        value: R$ 19,90
+      - key: PLAN_MONTHLY_PRICE
+        value: 19.90
+      - key: PLAN_QUARTERLY_BUTTON_ID
+        value: btn-3-meses
+      - key: PLAN_QUARTERLY_LABEL
+        value: 3 meses (33% off)
+      - key: PLAN_QUARTERLY_PRICE_LABEL
+        value: R$ 39,90
+      - key: PLAN_QUARTERLY_PRICE
+        value: 39.90
+      - key: PLAN_SEMESTRIAL_BUTTON_ID
+        value: btn-6-meses
+      - key: PLAN_SEMESTRIAL_LABEL
+        value: 6 meses (50% off)
+      - key: PLAN_SEMESTRIAL_PRICE_LABEL
+        value: R$ 59,90
+      - key: PLAN_SEMESTRIAL_PRICE
+        value: 59.90
+      - key: REDIRECT_URL
+        value: https://typebot.co/compra-privacyofc
+
