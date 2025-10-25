@@ -2,124 +2,98 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Pré-venda | Acesso ao Telegram</title>
 
-  <!-- Canonical/OG atrelados ao domínio do projeto -->
   <link rel="canonical" href="https://hadriellemaria.online/presell/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Pré-venda | Acesso ao Telegram">
   <meta property="og:description" content="Continue para acessar o bot no Telegram.">
   <meta property="og:url" content="https://hadriellemaria.online/presell/">
-  <meta property="twitter:card" content="summary_large_image">
+  <meta name="twitter:card" content="summary_large_image">
 
-  <!-- Perf: DNS Prefetch / Preconnect -->
   <link rel="dns-prefetch" href="https://connect.facebook.net">
   <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
   <link rel="dns-prefetch" href="https://ipapi.co">
   <link rel="preconnect" href="https://ipapi.co">
 
-  <style>
-    :root { --bg:#0f172a; --card:#111827; --txt:#e5e7eb; --pri:#3b82f6; }
-    *{box-sizing:border-box} body{margin:0;font-family:system-ui,Segoe UI,Arial;background:var(--bg);color:var(--txt);display:flex;min-height:100vh}
-    .wrap{margin:auto;max-width:560px;width:100%;padding:24px}
-    .card{background:var(--card);border-radius:16px;padding:28px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    h1{margin:0 0 8px;font-size:22px;line-height:1.2}
-    p{margin:0 0 16px;opacity:.9}
-    .cta{display:inline-flex;gap:10px;align-items:center;margin-top:8px;background:var(--pri);color:#fff;border:none;border-radius:12px;padding:12px 16px;font-weight:600;cursor:pointer;text-decoration:none}
-    .sub{font-size:12px;opacity:.7;margin-top:10px}
-  </style>
+  <link rel="stylesheet" href="/theme/overrides.css">
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <div class="hero">
+        <div class="avatar" aria-hidden="true">HM</div>
+        <h1 class="title">Hadrielle Maria</h1>
+        <p class="subtitle">Conteúdos exclusivos e acesso ao meu Telegram.</p>
+        <p class="geo">Pertinho de você, estou em <span id="geo-city">sua cidade</span>!</p>
+      </div>
+
+      <div class="buttons">
+        <a id="cta-telegram" class="btn" href="#" rel="nofollow">Entrar no Telegram</a>
+      </div>
+      <p class="note"><small>Ao continuar, você concorda com nossos termos.</small></p>
+    </section>
+  </main>
 
   <!-- Meta Pixel loader -->
   <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);}
-    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
   </script>
-  <script src="/env.js"></script>
-  <script>
-    // Garante PIXEL_ID a partir do .env (com fallback)
-    const PIXEL_ID = (window.APP_CONFIG && window.APP_CONFIG.PIXEL_ID) || '1280205146659070';
-    window.__PIXEL_ID__ = PIXEL_ID;
-  </script>
-</head>
-<body>
-  <div class="wrap">
-    <div class="card">
-      <h1>Preparando seu acesso…</h1>
-      <p>Esta é a página de pré-venda. Ao continuar, você será direcionado ao bot no Telegram.</p>
-      <a id="cta-telegram" class="cta" href="https://t.me/Ayllars_bot?start=Ch" rel="noopener">
-        Ir para o Telegram
-      </a>
-      <div class="sub">Dica: mantenha esta aba aberta para garantir o rastreamento.</div>
-    </div>
-  </div>
 
   <script>
-    // ====== CONFIG ======
-    const TELEGRAM_URL = 'https://t.me/Ayllars_bot?start=Ch'; // altere se quiser
+    // ====== CONFIG (ajuste só o TELEGRAM_URL) ======
+    const TELEGRAM_URL = 'https://t.me/Ayllars_bot?start=Ch';
 
-    // ====== Pixel init ======
+    // Expor/obter Pixel ID ANTES do init
+    window.__PIXEL_ID__ = (window.APP_CONFIG && window.APP_CONFIG.PIXEL_ID) || '1280205146659070';
     fbq('init', window.__PIXEL_ID__);
 
-    // SID por sessão (para eventID/correlação)
+    // Session id estável
     let sid = sessionStorage.getItem('sid');
-    if (!sid) {
-      sid = 'SID-' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
-      sessionStorage.setItem('sid', sid);
-    }
+    if (!sid) { sid = Math.random().toString(36).slice(2) + Date.now().toString(36); sessionStorage.setItem('sid', sid); }
 
-    // Captura UTMs e guarda (útil para etapas seguintes)
-    const qs = new URLSearchParams(location.search);
-    const utm = {
-      utm_source:   qs.get('utm_source')   || '',
-      utm_medium:   qs.get('utm_medium')   || '',
-      utm_campaign: qs.get('utm_campaign') || '',
-      utm_content:  qs.get('utm_content')  || '',
-      utm_term:     qs.get('utm_term')     || '',
-      session_id:   qs.get('session_id')   || ''
-    };
-    sessionStorage.setItem('utms', JSON.stringify(utm));
+    // PageView
+    fbq('track','PageView', {}, {eventID: 'pgv:' + sid});
 
-    // PageView (imediato) com eventID
-    fbq('track','PageView', {}, { eventID: 'pgv:'+sid });
-
-    // Geo assíncrono (não bloqueia UI) — advanced matching
-    (async () => {
-      try {
-        const r = await Promise.race([
-          fetch('https://ipapi.co/json/'),
-          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')), 800))
-        ]);
-        const d = r && (await r.json ? await r.json() : null) || {};
-        fbq('set','user', {
-          ct: (d.city || ""),
-          st: (d.region || ""),
-          zp: (d.postal || ""),
-          country: (d.country_name || "")
-        });
-        if (utm.session_id) fbq('set','user', { external_id: utm.session_id });
-      } catch(e) {}
+    // UTM capture
+    (function(){
+      const p = new URLSearchParams(location.search), utm = {};
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','session_id'].forEach(k=>{
+        const v = p.get(k); if (v) utm[k]=v;
+      });
+      sessionStorage.setItem('utms', JSON.stringify(utm));
     })();
 
-    // ViewContent com eventID
-    fbq('track','ViewContent', {
-      content_name: 'presell',
-      content_category: 'telegram_flow'
-    }, { eventID: 'vc:'+sid });
+    // Advanced Matching geo (timeout 800ms)
+    (function(){
+      const ctl = new AbortController(); const to = setTimeout(()=>ctl.abort(), 800);
+      fetch('https://ipapi.co/json', {signal: ctl.signal}).then(r=>r.json()).then(d=>{
+        clearTimeout(to);
+        const am={}; if(d){ if(d.country)am.ct=d.country; if(d.city)am.cty=d.city; if(d.region)am.st=d.region; if(d.postal)am.zp=d.postal; }
+        if(Object.keys(am).length) fbq('set','user',am);
+        // também preencher cidade na UI
+        const el = document.getElementById('geo-city'); if(el && d && d.city) el.textContent=d.city;
+      }).catch(()=>{});
+    })();
 
-    // Evento auxiliar no clique do CTA (opcional)
+    // ViewContent
+    fbq('track', 'ViewContent', {content_name:'presell'}, {eventID: 'vc:' + sid});
+
+    // CTA
     const cta = document.getElementById('cta-telegram');
-    cta?.addEventListener('click', () => {
-      fbq('trackCustom','PresellCTAClick', { dest: 'telegram' }, { eventID: 'cta:'+sid });
-    });
+    if (cta) {
+      cta.addEventListener('click', (ev)=>{
+        ev.preventDefault();
+        fbq('trackCustom','PresellCTAClick', {}, {eventID: 'cta:' + sid});
+        setTimeout(()=>{ location.href = TELEGRAM_URL; }, 150);
+      });
+    }
   </script>
-
-  <noscript>
-    <img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=1280205146659070&ev=PageView&noscript=1"/>
-  </noscript>
 </body>
 </html>
+
