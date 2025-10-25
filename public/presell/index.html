@@ -110,7 +110,7 @@
       </section>
     </div>
     <!-- === INTERSTICIAL (neon + barra + contador) — começa oculto === -->
-    <div class="vip-wrap">
+    <div class="vip-wrap" style="display:none">
       <div class="card vip-card">
         <div class="vip-head">
           <div class="vip-tele" aria-hidden="true"></div>
@@ -172,10 +172,8 @@
 
     // ... seu JS acima permanece igual (fbq init, sid, ViewContent etc.)
     // ====== TROCAR SOMENTE O HANDLER DO CTA ======
-    const TELEGRAM_URL = 'https://t.me/Ayllars_bot?start=Ch'; // ajuste se quiser
+    const TELEGRAM_URL = 'https://t.me/Ayllars_bot?start=Ch'; // o seu
     const cta    = document.getElementById('cta-telegram');
-    const normal = document.querySelector('.normal-wrap');
-    const vip    = document.querySelector('.vip-wrap');
     const barEl  = document.getElementById('vipBar');
     const cntEl  = document.getElementById('vipCount');
 
@@ -183,20 +181,22 @@
       const total = seconds*1000; const t0 = performance.now();
       function tick(ts){
         const p = Math.min((ts - t0)/total, 1);
-        barEl.style.width = (p*100) + '%';
+        if (barEl) barEl.style.width = (p*100) + '%';
         const remaining = Math.max(0, Math.ceil(seconds - p*seconds));
-        cntEl.textContent = `Redirecionando em ${remaining} segundos...`;
-        if(p<1){ requestAnimationFrame(tick); } else { location.href = TELEGRAM_URL; }
+        if (cntEl) cntEl.textContent = `Redirecionando em ${remaining} segundos...`;
+        if (p < 1) requestAnimationFrame(tick); else location.href = TELEGRAM_URL;
       }
       requestAnimationFrame(tick);
     }
 
     cta?.addEventListener('click', (ev)=>{
       ev.preventDefault();
-      fbq('trackCustom','PresellCTAClick', {}, { eventID: 'cta:' + sid });
-      normal && (normal.style.display = 'none');
-      vip && (vip.style.display = 'block');
-      startVipRedirect(3); // mude para 5 se quiser
+
+      try { fbq('trackCustom','PresellCTAClick', {}, { eventID: 'cta:' + sid }); } catch(e) {}
+
+      document.body.classList.add('vip-mode');
+
+      startVipRedirect(3); // ou 5
     }, { once:true });
   </script>
 </body>
